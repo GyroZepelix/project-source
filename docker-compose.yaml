@@ -1,0 +1,44 @@
+version: "3.9"
+name: project-source
+
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - postgresql-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+
+  cassandra:
+    image: cassandra:latest
+    ports:
+      - "9042:9042"
+    volumes:
+      - cassandra-db:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=project-source
+
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: password
+    ports:
+      - "18080:8080"
+    command:
+      - start-dev
+    depends_on:
+      - postgres
+
+volumes:
+  cassandra-db:
+  postgresql-db:
