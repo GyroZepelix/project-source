@@ -1,0 +1,6 @@
+spring:
+  cassandra:
+    port: 9042
+    contact-points: project-source-cassandra-1
+    keyspace-name: projectsource
+    schema-action: create_if_not_exists

@@ -14,6 +14,7 @@ services:
       - "5432:5432"
 
   cassandra:
+    container_name: project-source-cassandra-1
     image: cassandra:latest
     ports:
       - "9042:9042"
