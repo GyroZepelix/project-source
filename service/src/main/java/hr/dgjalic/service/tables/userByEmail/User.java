@@ -3,11 +3,11 @@ package hr.dgjalic.service.tables.userByEmail;
 
 import hr.dgjalic.service.user_defined_types.UserKey;
 import lombok.*;
-import org.springframework.data.cassandra.core.mapping.CassandraType;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.*;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Builder
 @NoArgsConstructor
@@ -16,16 +16,18 @@ import java.sql.Timestamp;
 @Table("user_by_email")
 public class User {
 
-    @PrimaryKey
+    @PrimaryKeyColumn(name = "email", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String email;
 
+    @Column("user_key")
+    private UserKey userKey;
 
-    private UserKey user_key;
+    @Column("image_path")
+    private String imagePath;
 
-    private String image_path;
-
+    @Column("created_at")
     @CassandraType(type = CassandraType.Name.TIMESTAMP)
-    private Timestamp created_at;
+    private Timestamp createdAt;
 
 
 }
