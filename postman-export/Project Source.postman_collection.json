@@ -1,0 +1,306 @@
+{
+	"info": {
+		"_postman_id": "8cb193a8-1b79-40e7-bd7c-8ad5f698d698",
+		"name": "Project Source",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22419676"
+	},
+	"item": [
+		{
+			"name": "UserByEmail",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/userByEmail",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"userByEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post User By Email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{Email}}\",\r\n    \"userKey\": {\r\n        \"username\": \"{{Username}}\",\r\n        \"tag\": \"{{Tag}}\"\r\n    },\r\n    \"id\": \"{{$randomUUID}}\",\r\n    \"imagePath\": \"{{ImagePath}}\",\r\n    \"createdAt\": \"{{$timestamp}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/api/userByEmail",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"userByEmail"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BaseURL}}/api/userByEmail/:email",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"userByEmail",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "{{Email}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ChatByUser",
+			"item": [
+				{
+					"name": "Get All Chats",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/chatByUser",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"chatByUser"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chat by User Email",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/chatByUser/:email",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"chatByUser",
+								":email"
+							],
+							"variable": [
+								{
+									"key": "email",
+									"value": "{{Email}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{Email}}\",\r\n    \"lastMessageTime\": \"{{$timestamp}}\",\r\n    \"chatId\": \"{{$randomUUID}}\",\r\n    \"iconPath\": \"{{ImagePath}}\" ,\r\n    \"name\": \"{{$randomFirstName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BaseURL}}/api/chatByUser",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"chatByUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Token",
+			"item": [
+				{
+					"name": "Get Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var data = pm.response.json();\r",
+									"pm.environment.set(\"Token\", data.access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{Token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "{{AccountUsername}}",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "{{AccountPassword}}",
+									"type": "default"
+								},
+								{
+									"key": "client_id",
+									"value": "backend",
+									"type": "default"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "default"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{ClientSecret}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:18080/realms/project-source/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "18080",
+							"path": [
+								"realms",
+								"project-source",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
