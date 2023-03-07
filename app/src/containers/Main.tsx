@@ -8,7 +8,8 @@ const Main = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/app" element={<AppMain />}></Route>
+        <Route path="/channels/:serverId" element={<AppMain />}/>
+        <Route path="*" element={<div>404</div>} />
       </Routes>
     </BrowserRouter>
   )
