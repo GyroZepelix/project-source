@@ -3,13 +3,15 @@ name: project-source
 
 services:
   postgres:
-    image: postgres
-    volumes:
-      - postgresql-db:/var/lib/postgresql/data
+    container_name: project-source-postgres-keycloak-1
+    image: postgres:latest
     environment:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: password-keycloak
+      PGDATA: /data/postgres
+    volumes:
+      - postgres-db:/data/postgres
     ports:
       - "5432:5432"
 
@@ -27,21 +29,23 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:latest
     environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_SCHEMA: public
-      DB_PASSWORD: password
+      KC_DB: postgres
+      KC_HOSTNAME: localhost
+      KC_DB_PASSWORD: password-keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_URL: jdbc:postgresql://project-source-postgres-keycloak-1:5432/keycloak
+      KC_DB_URL_PORT: 5432
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: password
     ports:
       - "8080:8080"
     command:
       - start-dev
+    volumes:
+      - ./docker/scripts:/scripts
     depends_on:
       - postgres
 
 volumes:
   cassandra-db:
-  postgresql-db:
+  postgres-db:
