@@ -9,7 +9,7 @@ import useAuth from '../hooks/useAuth'
 
 export const GlobalParametersContext = createContext<IGlobalParameters>({} as IGlobalParameters)
 
-
+// TODO: Organise this file
 
 const ApplicationMain = () => {
   

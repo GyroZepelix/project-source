@@ -3,6 +3,9 @@ import { BrowserRouter } from "react-router-dom"
 import ApplicationMain from "./ApplicationMain"
 import Home from "./Home"
 
+// TODO: Add 404 page
+// TODO: add automatic redirect from /channels to /channels/@me etc.
+
 const Main = () => {
   return (
     <BrowserRouter>
