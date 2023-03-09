@@ -9,9 +9,8 @@ services:
       POSTGRES_DB: keycloak
       POSTGRES_USER: keycloak
       POSTGRES_PASSWORD: password-keycloak
-      PGDATA: /data/postgres
     volumes:
-      - postgres-db:/data/postgres
+      - postgres-db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
 
@@ -40,9 +39,9 @@ services:
     ports:
       - "8080:8080"
     command:
-      - start-dev
+      - start-dev --import-realm
     volumes:
-      - ./docker/scripts:/scripts
+      - ./docker/keycloak:/opt/keycloak/data/import
     depends_on:
       - postgres
 
