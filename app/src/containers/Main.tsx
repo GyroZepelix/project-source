@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router"
 import { BrowserRouter } from "react-router-dom"
-import AppMain from "./AppMain"
+import ApplicationMain from "./ApplicationMain"
 import Home from "./Home"
 
 const Main = () => {
@@ -8,7 +8,7 @@ const Main = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/channels/:serverId" element={<AppMain />}/>
+        <Route path="/channels/:serverId/*" element={<ApplicationMain/>}/>
         <Route path="*" element={<div>404</div>} />
       </Routes>
     </BrowserRouter>

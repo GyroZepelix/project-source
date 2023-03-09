@@ -8,13 +8,13 @@ const mockServers:any[] = [
   {name: "test3", serverId:"3", image: "https://yt3.googleusercontent.com/_DiGCcjGwJQAZ3zmlyB8TCYuA8O9tDJ9zGNysq5sR0rxwYb6SP5fW8cb3LbfcRwfui0m27oIhA=s900-c-k-c0x00ffffff-no-rj"},
 ]
 
-const appRoot = '/app'
+const appRoot = '/channels'
 
 const ServerNavigator = () => {
   const navigate = useNavigate()
 
   const onClickHome = () => {
-    navigate(appRoot)
+    navigate(`${appRoot}/@me`)
   }
 
   const onClickServer = (serverId: string) => {
