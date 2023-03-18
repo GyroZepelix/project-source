@@ -1,8 +1,9 @@
-import Sidebar from "../components/Sidebar"
+import Sidebar from "../components/Sidebar/Sidebar"
 import MessageSection from "../components/MessageSection"
 import { useNavigate, useParams } from "react-router"
 import { useContext, useEffect } from "react"
 import { GlobalParametersContext } from "./ApplicationMain"
+import FriendSidebar from "../components/FriendSidebar/FriendSidebar"
 
 const ChannelBrowser = () => {
 
@@ -16,12 +17,19 @@ const ChannelBrowser = () => {
   }, [channelId])
 
   return (
-    <div className="text-main">
-      <Sidebar />
-      <MessageSection/>
-      <h1>sID: {globalParams.serverId} | cID: {globalParams.channelId.get}</h1>
-      <button onClick={() => {navigator("/channels/@me/1",)}}>test</button>
-    </div>
+    <main className="text-main h-full flex">
+      {
+        globalParams.serverId === "@me" ?
+        <>
+          <FriendSidebar/>
+        </>
+        :
+        <>
+          <Sidebar />
+          <MessageSection/>
+        </>
+      }
+    </main>
   )
 }
 

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import homeButton from '../assets/homeButton.svg'
 import ServerButton from './ServerSelection/ServerButton'
 
@@ -10,10 +10,19 @@ const mockServers:any[] = [
   {name: "test3", serverId:"3", image: "https://yt3.googleusercontent.com/_DiGCcjGwJQAZ3zmlyB8TCYuA8O9tDJ9zGNysq5sR0rxwYb6SP5fW8cb3LbfcRwfui0m27oIhA=s900-c-k-c0x00ffffff-no-rj"},
 ]
 
+const dotOnHover = 'before:-translate-x-3.5 before:rounded-md before:top-0 before:my-auto before:bottom-0 hover:before:absolute hover:before:block before:w-2 before:h-10 before:bg-yellow-300'
+
+// FIXME: When window is too small, the server buttons and the navigator get squished.
+
 const appRoot = '/channels'
 
 const ServerNavigator = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const selectedServer = location.pathname.split("/")[2]
+  const dotOnHover = 'before:-translate-x-3.5 before:rounded-md before:top-0 before:transition-all before:h-3 before:my-auto before:bottom-0 hover:before:absolute hover:before:block before:w-2 hover:before:h-10 before:bg-main'
+
 
   const onClickHome = () => {
     navigate(`${appRoot}/@me`)
@@ -24,15 +33,15 @@ const ServerNavigator = () => {
   }
 
   return (
-    <nav className='bg-primary-250 h-full px-2 py-4 gap-2 flex flex-col items-center select-none'>
-        <div className='cursor-pointer' onClick={onClickHome}>
-          <img className='h-[50px] select-none pointer-events-none' src={homeButton} alt="Home Button" />
-        </div>
-      <div className='bg-primary-750 w-10 h-[3px] rounded' />
-      {mockServers.map((server) => (
-        <ServerButton key={server.serverId} {...server} onClick={() => {onClickServer(server.serverId)}} />
-      ))
-      }
+  <nav className=' bg-primary-0 h-full px-2.5 py-4 gap-2 flex flex-col items-center select-none'>
+    <div className={`relative cursor-pointer ${selectedServer == "@me" && "before:block before:absolute "} ${dotOnHover} `} onClick={onClickHome}>
+      <img className='h-[50px] select-none pointer-events-none ' src={homeButton} alt="Home Button" />
+    </div>
+    <div className='bg-primary-750 w-10 h-[3px] rounded' />
+    {mockServers.map((server) => (
+      <ServerButton key={server.serverId} selected={server.serverId == selectedServer} {...server} onClick={() => {onClickServer(server.serverId)}} />
+    ))
+    }
     </nav>
   )
 }

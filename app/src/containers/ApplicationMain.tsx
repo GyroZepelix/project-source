@@ -36,6 +36,7 @@ const ApplicationMain = () => {
         <ServerNavigator />
         <div className='flex flex-row '>
           <Routes>
+            <Route path='/' element={<ChannelBrowser />} />
             <Route path='/:channelId' element={<ChannelBrowser />} />
           </Routes>
         </div>
