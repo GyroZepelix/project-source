@@ -34,7 +34,7 @@ const ApplicationMain = () => {
     <GlobalParametersContext.Provider value={globalParams}>
       <div className='flex flex-row font-inter h-screen w-screen bg-primary-750'>
         <ServerNavigator />
-        <div className='flex flex-row '>
+        <div className='flex flex-row w-full'>
           <Routes>
             <Route path='/' element={<ChannelBrowser />} />
             <Route path='/:channelId' element={<ChannelBrowser />} />

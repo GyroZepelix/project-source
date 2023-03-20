@@ -6,7 +6,7 @@ const tempImage = "https://cdn.eso.org/images/screen/eso1907a.jpg"
 
 const Sidebar = () => {
   return (
-    <div className='flex flex-col justify-between h-full w-64 bg-primary-500'>
+    <div className='min-w-[256px] flex flex-col justify-between h-full w-64 bg-primary-500'>
       <div>
         <SidebarHeader banner={tempImage} serverName='Testicles'/>
         <h1>test</h1>

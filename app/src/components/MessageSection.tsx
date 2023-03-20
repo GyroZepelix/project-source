@@ -1,8 +1,9 @@
 import React from 'react'
+import MessagingContainer from '../containers/MessagingContainer'
 
 const MessageSection = () => {
   return (
-    <div>MessageSection</div>
+    <MessagingContainer></MessagingContainer>
   )
 }
 

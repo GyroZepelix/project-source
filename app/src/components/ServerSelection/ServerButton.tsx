@@ -15,7 +15,7 @@ const ServerButton:FC<IProps> = ({selected=false, image="", name="", serverId=""
   
   
   return (
-    <div className={`group ${selected && "before:block before:absolute "} ${dotOnHover} relative bg-primary-1000 rounded-full cursor-pointer`} onClick={() => onClick(serverId)}>
+    <div className={`min-w-[49px] group ${selected && "before:block before:absolute "} ${dotOnHover} relative bg-primary-1000 rounded-full cursor-pointer`} onClick={() => onClick(serverId)}>
       <img className={`rounded-[25px] transition-[border-radius] group-hover:rounded-2xl ${selected && "!rounded-2xl"} object-cover w-[50px] h-[50px] pointer-events-none select-none`} src={image} alt={name} />
     </div>
   )

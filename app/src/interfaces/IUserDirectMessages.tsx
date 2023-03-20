@@ -1,4 +1,5 @@
 export default interface IUserDirectMessages {
   name: string,
-  image: string
+  image: string,
+  id: string
 }

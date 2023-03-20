@@ -8,6 +8,26 @@
   padding: 0;
 }
 
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #061D28; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #010c1a; 
+  border-radius: 10px 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #031722; 
+}
 
 @tailwind base;
 @tailwind components;

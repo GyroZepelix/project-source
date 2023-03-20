@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router"
 import { useContext, useEffect } from "react"
 import { GlobalParametersContext } from "./ApplicationMain"
 import FriendSidebar from "../components/FriendSidebar/FriendSidebar"
+import MessagingContainer from "./MessagingContainer"
 
 const ChannelBrowser = () => {
 
@@ -17,11 +18,12 @@ const ChannelBrowser = () => {
   }, [channelId])
 
   return (
-    <main className="text-main h-full flex">
+    <main className="text-main h-full flex w-full">
       {
         globalParams.serverId === "@me" ?
         <>
           <FriendSidebar/>
+          <MessagingContainer/>
         </>
         :
         <>
