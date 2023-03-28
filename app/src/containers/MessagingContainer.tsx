@@ -37,12 +37,12 @@ function MessagingContainer() {
     }
   }
 
-  
+  const keysToIgnore = ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
 
   const keyDownHandler = (event:KeyboardEvent) => {
 
     console.log(event.key);
-    inputRef.current?.focus();
+    if (!keysToIgnore.includes(event.key)) inputRef.current?.focus();
     
     if (event.key === 'Enter') {
       event.preventDefault();
@@ -69,8 +69,8 @@ function MessagingContainer() {
   }
 
   return (
-    <div className="flex flex-col h-full w-full">
-      <div ref={messageBoxRef} className="mr-1 flex flex-col flex-1 overflow-y-scroll w-auto">
+    <div className="flex flex-col h-full grow">
+      <div ref={messageBoxRef} className="mr-1 flex flex-col flex-1 overflow-y-scroll w-auto overflow-x-clip">
         <UserMessagesRepresentation username='Kob3ey' image='https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png'/>
         {messages.map((message, index) => {
         let extendsMessage = message.username == previousMessage.username;

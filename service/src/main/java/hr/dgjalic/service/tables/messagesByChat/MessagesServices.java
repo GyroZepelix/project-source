@@ -1,23 +1,27 @@
 package hr.dgjalic.service.tables.messagesByChat;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
-@RestController
+@Service
+@RequiredArgsConstructor
 public class MessagesServices {
 
-    @Autowired
-    private MessagesRepository messagesRepository;
+    private final MessagesRepository messagesRepository;
 
-    public Messages getMessages(String chatId) {
+    public Message getMessages(String chatId) {
         return messagesRepository.findByChatId(chatId);
     }
 
-    public Iterable<Messages> getAllMessages() {
+    public Iterable<Message> getAllMessages() {
         return messagesRepository.findAll();
     }
 
-    public Messages createMessages(Messages messages) {
-        return messagesRepository.save(messages);
+    public Message createMessages(Message message) {
+        return messagesRepository.save(message);
+    }
+
+    public void purgeMessages(String chatId) {
+        messagesRepository.deleteAllByChatId(chatId);
     }
 }

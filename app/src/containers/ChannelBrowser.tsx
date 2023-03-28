@@ -18,7 +18,7 @@ const ChannelBrowser = () => {
   }, [channelId])
 
   return (
-    <main className="text-main h-full flex w-full">
+    <main className="text-main h-full flex grow">
       {
         globalParams.serverId === "@me" ?
         <>

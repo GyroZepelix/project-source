@@ -1,4 +1,4 @@
-package hr.dgjalic.service.security;
+package hr.dgjalic.service.config.security;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -71,14 +71,4 @@ public class CustomJwtAuthenticationConverter implements Converter<Jwt, Abstract
         }
         return new ArrayList<>();
     }
-
-    // Methods for later use
-    private String getUsername(Jwt jwt) {
-        return jwt.getClaimAsString("preferred_username");
-    }
-
-    private String getEmail(Jwt jwt) {
-        return jwt.getClaimAsString("email");
-    }
-
 }

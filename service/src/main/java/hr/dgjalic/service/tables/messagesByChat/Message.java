@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table("messages_by_chat")
-public class Messages {
+public class Message {
 
     @PrimaryKeyColumn(name = "chat_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String chatId;
@@ -34,6 +34,7 @@ public class Messages {
     @Column("sender_icon_path")
     private String senderIconPath;
 
-    @Column("sender_name")
+    @Column("sender_user_key")
     private UserKey senderUserKey;
+
 }
