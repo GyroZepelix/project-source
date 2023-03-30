@@ -1,47 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import { StompSubscription } from '@stomp/stompjs';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { HiPlusCircle } from 'react-icons/hi';
 import UserMessagesRepresentation from '../components/Messages/FriendMessages/UserMessagesRepresentation';
 import Message from '../components/Messages/Message';
-
-interface MessageData {
-  content: string;
-  senderEmail: string;
-  username: string;
-  image: string;
-  timeSent: string;
-}
+import IChatMessage from '../interfaces/IChatMessage';
+import { GlobalParametersContext } from './ApplicationMain';
 
 // TODO: Merge by Time and Username and not only by Username
 
 function MessagingContainer() {
-  const [messages, setMessages] = useState<MessageData[]>([]);
+  const globalParams = useContext(GlobalParametersContext)
+  const [messages, setMessages] = useState<IChatMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const inputRef = React.useRef<HTMLInputElement>(null);
   const messageBoxRef = React.useRef<HTMLDivElement>(null);
-  let previousMessage:MessageData = {} as MessageData
-
-  const handleSendClick = () => {
-    if (currentMessage !== '') {
-      setMessages([
-        ...messages,
-        {
-          content: currentMessage,
-          senderEmail: 'user@example.com',
-          username: 'Kob3eY',
-          image: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png',
-          timeSent: '1:00 PM',
-        },
-      ]);
-      setCurrentMessage('');
-    }
-  }
+  let previousMessage:IChatMessage = {senderUserKey:{username:""}} as IChatMessage
+  const websocketHeaders = {Authorization: `Bearer ${globalParams.auth?.token}`}
 
   const keysToIgnore = ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-
   const keyDownHandler = (event:KeyboardEvent) => {
 
-    console.log(event.key);
     if (!keysToIgnore.includes(event.key)) inputRef.current?.focus();
     
     if (event.key === 'Enter') {
@@ -50,6 +29,49 @@ function MessagingContainer() {
     }
     
   };
+
+  const handleSendClick = () => {
+    if (currentMessage !== '' && globalParams.stompClient != null) {
+      globalParams.stompClient.publish({
+        destination: `/app/chat/${globalParams.channelId.get}`,
+        body: currentMessage,
+        headers: websocketHeaders
+      });
+      setCurrentMessage('');
+    }
+  }
+
+  useEffect(() => {
+    let subscription: StompSubscription | undefined = undefined;
+    const channelId = globalParams.channelId.get;
+    const clientConnectedAndChannelSelected = globalParams.stompClient != undefined && channelId != null && channelId !== '' && globalParams.stompClient.active;
+    if (clientConnectedAndChannelSelected) {
+      subscription = globalParams.stompClient?.subscribe(`/channel/chat/${channelId}`, (message) => {
+        const recievedMessages = JSON.parse(message.body);
+        if (Array.isArray(recievedMessages)) {
+          setMessages(JSON.parse(message.body));
+        } else {
+          setMessages((messages) => [...messages, recievedMessages]);
+        }
+      });
+      globalParams.stompClient?.publish({destination: `/app/chat/${channelId}/get`, headers: websocketHeaders})
+      console.log("subscribed");
+    } else {
+      setMessages([]); 
+    }
+
+
+    return () => {
+      if (subscription != undefined) {
+        subscription.unsubscribe();
+        console.log("unsubscribed");
+      }
+
+    }
+  }, [globalParams.channelId.get, globalParams.stompClient]);
+
+
+
 
   useEffect(() => {
     if (messageBoxRef.current != null) messageBoxRef.current.scrollTop = messageBoxRef.current?.scrollHeight || 0;
@@ -73,9 +95,9 @@ function MessagingContainer() {
       <div ref={messageBoxRef} className="mr-1 flex flex-col flex-1 overflow-y-scroll w-auto overflow-x-clip">
         <UserMessagesRepresentation username='Kob3ey' image='https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png'/>
         {messages.map((message, index) => {
-        let extendsMessage = message.username == previousMessage.username;
+        let extendsMessage = message.senderUserKey.username == previousMessage.senderUserKey.username;
         previousMessage = message;
-        return  <Message key={index} {...message} extendsMessage={extendsMessage}/>
+        return  <Message key={index} chatMessage={message} extendsMessage={extendsMessage}/>
         })}
         <div className='opacity-0 py-4'>.</div>
       </div>

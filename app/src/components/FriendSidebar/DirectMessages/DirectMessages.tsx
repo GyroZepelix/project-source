@@ -1,7 +1,7 @@
 import {HiPlusSm} from 'react-icons/hi'
 import { useNavigate } from 'react-router'
 import IUserDirectMessages from '../../../interfaces/IUserDirectMessages'
-import DMUser from './DMUser'
+import DirectMessageUserButton from './DirectMessageUserButton'
 
 const directMessageUsers: IUserDirectMessages[] = [
   {
@@ -17,7 +17,7 @@ const directMessageUsers: IUserDirectMessages[] = [
   {
     name: 'Plejic',
     image: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png',
-    id: '3'
+    id: '10'
   }
 ]
 
@@ -33,7 +33,7 @@ const DirectMessages = () => {
       <div className='mx-2'>
         {
           directMessageUsers.map((user) => (
-            <DMUser key={user.name} name={user.name} image={user.image} onClick={() => {navigate(`/channels/@me/${user.id}`)}} />
+            <DirectMessageUserButton key={user.name} name={user.name} image={user.image} onClick={() => {navigate(`/channels/@me/${user.id}`)}} />
           ))
         }
       </div>

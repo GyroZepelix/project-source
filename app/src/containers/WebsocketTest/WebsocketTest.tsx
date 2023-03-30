@@ -39,7 +39,7 @@ const WebsocketTest = () => {
     return () => {
       stompClient.deactivate()
     }
-  }, [])
+  }, [stompClient])
 
   const onPublish = () => {
     stompClient.publish({destination: `/app/chat/${chatId}`, body: messageInTextbox})
