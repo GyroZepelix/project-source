@@ -9,26 +9,19 @@ import useAuth from '../hooks/useAuth'
 import IChatMessage from '../interfaces/IChatMessage'
 import useWebsocket from '../hooks/useWebsocket'
 import Disconnected from './Exceptions/Disconnected'
+import { useQuery } from '@tanstack/react-query'
+import { RestApiHandler } from '../services/RestApiHandler'
+import { ApiV1 } from '../services/ApiV1'
 
 export const GlobalParametersContext = createContext<IGlobalParameters>({} as IGlobalParameters)
 
 // TODO: Organise this file
-// FIXME: Do not let user pass if websocket not connected
 
 const ApplicationMain = () => {
   
-  const auth = useAuth()
-  
   const channelId = useState('')
   const { serverId="" } = useParams()
-  
-  let globalParams:IGlobalParameters = {
-    serverId: serverId,
-    channelId: {get: channelId[0], set: channelId[1]},
-    stompClient: undefined,
-    auth: undefined
-  }
-
+  const auth = useAuth()
   const stompClient = useWebsocket({
     onConnect: () => {
       console.log('Connected to websocket')
@@ -37,17 +30,29 @@ const ApplicationMain = () => {
       console.log('Disconnected from websocket')
     }
   })
-  globalParams.stompClient = stompClient
-  globalParams.auth = auth
+  
+  
+  let globalParams:IGlobalParameters = {
+    serverId: serverId,
+    channelId: {get: channelId[0], set: channelId[1]},
+    stompClient: stompClient,
+    auth: auth,
+    HANDLER: undefined
+  }
+
+  
 
   useEffect(() => {
     globalParams.serverId = serverId
   }, [serverId])
-
   
   if (!auth.isLogin) { return <Unauthorised />}
+  
+  const HANDLER = new RestApiHandler(new ApiV1(import.meta.env.VITE_BACKEND_BASE_URL, auth))
+  globalParams.HANDLER = HANDLER
+  HANDLER.API.getUser()
 
-  if (!stompClient.active) {
+  if (!stompClient.connected) {
     return <Disconnected />
   }
 

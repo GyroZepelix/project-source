@@ -1,4 +1,4 @@
-import IUser from "./IUser";
+import IUserKey from "./IUserKey";
 
 export default interface IChatMessage {
   chatId: string;
@@ -6,5 +6,5 @@ export default interface IChatMessage {
   content: string;
   senderEmail: string;
   senderIconPath: string;
-  senderUserKey: IUser;
+  senderUserKey: IUserKey;
 }

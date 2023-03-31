@@ -1,4 +1,8 @@
+import IUserKey from "./IUserKey";
+
 export default interface IUser {
-  username: string;
-  tag: number;
+  email: string;
+  userKey: IUserKey;
+  imagePath: string;
+  createdAt: Date;
 }
