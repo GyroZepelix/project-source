@@ -2,7 +2,7 @@ import axios from "axios";
 import { IApi } from "../interfaces/IApi";
 import { IAuth } from "../interfaces/IAuth";
 import IUser from "../interfaces/IUser";
-import { ApiWithKeycloak } from "./ApiWithKeycloak";
+import ApiWithKeycloak from "./ApiWithKeycloak";
 
 
 export class ApiV1 extends ApiWithKeycloak implements IApi {
@@ -10,10 +10,11 @@ export class ApiV1 extends ApiWithKeycloak implements IApi {
 
   constructor(baseUrl: string, auth: IAuth) {
     super(auth);
-    this._baseUrl = baseUrl;
+    this._baseUrl = `${baseUrl}/api`;
   }
 
-  getUser = () => {return axios.get(`${this._baseUrl}/userByEmail`, super.buildConfig())}
+  getUser = () => {return axios.get(`${this._baseUrl}/userByEmail`, this.buildConfig())}
 
+  createUser = (user: IUser) => {return axios.post(`${this._baseUrl}/userByEmail`, user, this.buildConfig())}
 
 }

@@ -22,6 +22,9 @@ public class MessagesController {
 
     @MessageMapping("/chat/{chatId}")
     private void receiveAndDistributeMessage(@Payload String content, @DestinationVariable String chatId, @Header("Authorization") String authToken) {
+        if (authToken == null) {
+            return;
+        }
         Message returnedMessage = messagesServices.createMessages(content, chatId, authToken);
 
         simpMessagingTemplates.convertAndSend("/channel/chat/" + chatId, returnedMessage );

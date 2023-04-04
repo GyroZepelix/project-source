@@ -1,31 +1,35 @@
 package hr.dgjalic.service.tables.userByEmail;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/userByEmail")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserController {
-    @Autowired
-    private UserRepository userRepository;
 
-    @GetMapping("/{email}")
-    public ResponseEntity<User> getUser(@PathVariable String email) {
-        User user = userRepository.findByEmail(email);
-        return ResponseEntity.ok(user);
-    }
+    private final UserService userService;
 
-    @GetMapping()
+    @GetMapping("/all")
     public ResponseEntity<Iterable<User>> getAllUsers() {
-        Iterable<User> users = userRepository.findAll();
+        Iterable<User> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping()
+    public ResponseEntity<User> getUser(@RequestHeader("Authorization") String authToken) {
+        return userService.getUser(authToken)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping()
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userRepository.save(user);
-        return ResponseEntity.ok(createdUser);
+    public ResponseEntity<User> createUser(@RequestBody User user, @RequestHeader("Authorization") String authToken) {
+        return userService.createUser(user, authToken)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.badRequest().build());
     }
 
 }

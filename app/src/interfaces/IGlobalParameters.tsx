@@ -2,6 +2,7 @@ import { Client } from "@stomp/stompjs"
 import { RestApiHandler } from "../services/RestApiHandler"
 import { IAuth } from "./IAuth"
 import IChatMessage from "./IChatMessage"
+import IUser from "./IUser"
 
 export default interface IGlobalParameters {
   serverId: string

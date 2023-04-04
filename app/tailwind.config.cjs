@@ -24,6 +24,10 @@ module.exports = {
           "0%": { transform: "scale(0)" },
           "100%": { transform: "scale(1)" },
         },
+        "object-position-shift": {
+          "0%": { objectPosition: "0% 0%" },
+          "100%": { objectPosition: "100% 100%" }
+        }
       },
       animation: {
         "fade-in": "fade-in 0.5s ease-in-out",

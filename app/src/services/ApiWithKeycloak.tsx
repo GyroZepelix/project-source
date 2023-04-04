@@ -1,6 +1,6 @@
 import { IAuth } from "../interfaces/IAuth"
 
-export class ApiWithKeycloak {
+export default abstract class ApiWithKeycloak {
 
   private readonly _auth: IAuth
 
