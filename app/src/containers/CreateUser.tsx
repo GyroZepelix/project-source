@@ -3,6 +3,9 @@ import { useContext, useEffect, useState } from 'react'
 import ProjectSourceLogo from '../assets/projectsource.svg'
 import IUser from '../interfaces/IUser'
 import { GlobalParametersContext } from './ApplicationMain'
+import NoChannelIdGradient from './NoChannelIdGradient'
+
+//TODO add the ability to change the profile picture
 
 const CreateUser = () => {
   const globalParams = useContext(GlobalParametersContext)
@@ -61,10 +64,12 @@ const CreateUser = () => {
 
   return (
     <div className='font-inter flex flex-row h-screen w-screen bg-primary-750 text-main' >
-      <div className='flex flex-col justify-center items-center w-full bg-inherit'>
+      <div className='relative flex flex-col justify-center items-center w-full bg-inherit'>
+        <NoChannelIdGradient className='absolute'/>
         <div className=' group flex items-center relative rounded-3xl border-2 border-main bg-inherit'>
-          <div className='absolute top-0 mx-auto left-0 right-0 bg-inherit -translate-y-1/2 w-36'>
-            <img className='m-auto p-3 h-full w-full' src={ProjectSourceLogo} alt="Project Source logo" />
+          <div className='rounded-3xl absolute top-0 mx-auto left-0 right-0 -translate-y-1/2 w-40 border-2 border-main bg-inherit'>
+            <img className='m-auto py-3 px-5 h-full w-full relative z-10' src={ProjectSourceLogo} alt="Project Source logo" />
+            <div className='absolute bg-inherit  -left-0.5 -right-0.5 top-1/2 -bottom-[3px]'></div>
           </div>
 
           <div className='flex justify-center items-center h-full flex-col py-10 px-14'>

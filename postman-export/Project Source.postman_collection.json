@@ -184,7 +184,7 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "Add Chat",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -283,18 +283,41 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:18080/realms/project-source/protocol/openid-connect/token",
+							"raw": "http://localhost:8080/realms/project-source/protocol/openid-connect/token",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "18080",
+							"port": "8080",
 							"path": [
 								"realms",
 								"project-source",
 								"protocol",
 								"openid-connect",
 								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "MessagesByChat",
+			"item": [
+				{
+					"name": "Get Messages By Chat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BaseURL}}/api/messagesByChat",
+							"host": [
+								"{{BaseURL}}"
+							],
+							"path": [
+								"api",
+								"messagesByChat"
 							]
 						}
 					},

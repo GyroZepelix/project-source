@@ -7,6 +7,7 @@ import FriendSidebar from "../components/FriendSidebar/FriendSidebar"
 import MessagingContainer from "./MessagingContainer"
 import IChatMessage from "../interfaces/IChatMessage"
 import useWebsocket from "../hooks/useWebsocket"
+import NoChannelIdGradient from "./NoChannelIdGradient"
 
 
 
@@ -26,7 +27,7 @@ const ChannelBrowser = () => {
         globalParams.serverId === "@me" ?
         <>
           <FriendSidebar/>
-          <MessagingContainer/>
+          {channelId !== "" ? <MessagingContainer/> : <NoChannelIdGradient/>}
         </>
         :
         <>
