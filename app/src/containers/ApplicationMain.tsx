@@ -14,6 +14,8 @@ import { RestApiHandler } from '../services/RestApiHandler'
 import { ApiV1 } from '../services/ApiV1'
 import CheckIfUserExists from './Exceptions/CheckIfUserExists'
 import IUser from '../interfaces/IUser'
+import IChatJointWithUser from '../interfaces/IChatJointWithUser'
+import FetchPrivateMessageUsers from './FetchPrivateMessageUsers'
 
 export const GlobalParametersContext = createContext<IGlobalParameters>({} as IGlobalParameters)
 
@@ -21,7 +23,7 @@ export const GlobalParametersContext = createContext<IGlobalParameters>({} as IG
 
 const ApplicationMain = () => {
 
-  const channelId = useState('')
+  const [privateChatsById, setPrivateChatsById] = useState<Map<string, IChatJointWithUser>>(new Map<string, IChatJointWithUser>())
   const { serverId="" } = useParams()
   const auth = useAuth()
   const stompClient = useWebsocket({
@@ -36,10 +38,11 @@ const ApplicationMain = () => {
   
   let globalParams:IGlobalParameters = {
     serverId: serverId,
-    channelId: {get: channelId[0], set: channelId[1]},
+    channelId: "",
     stompClient: stompClient,
     auth: auth,
     HANDLER: {} as RestApiHandler,
+    privateChatsById: {get: privateChatsById, set: setPrivateChatsById}
   }
 
   
@@ -58,18 +61,21 @@ const ApplicationMain = () => {
   }
 
   return (
-    
     <GlobalParametersContext.Provider value={globalParams}>
-      <CheckIfUserExists redirect={<h1>no</h1>}>
-        <div className='flex flex-row font-inter h-screen w-grow bg-primary-750'>
-          <ServerNavigator />
-          <div className='flex flex-row grow'>
-            <Routes>
-              <Route path='/' element={<ChannelBrowser />} />
-              <Route path='/:channelId' element={<ChannelBrowser />} />
-            </Routes>
+      <CheckIfUserExists >
+        <FetchPrivateMessageUsers>
+
+          <div className='flex flex-row font-inter h-screen w-grow bg-primary-750'>
+            <ServerNavigator />
+            <div className='flex flex-row grow'>
+              <Routes>
+                <Route path='/' element={<ChannelBrowser />} />
+                <Route path='/:channelId' element={<ChannelBrowser />} />
+              </Routes>
+            </div>
           </div>
-        </div>
+
+        </FetchPrivateMessageUsers>  
       </CheckIfUserExists>
     </GlobalParametersContext.Provider>
   )

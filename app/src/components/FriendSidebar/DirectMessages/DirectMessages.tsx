@@ -1,28 +1,23 @@
 import {HiPlusSm} from 'react-icons/hi'
 import { useNavigate } from 'react-router'
-import IUserDirectMessages from '../../../interfaces/IUserDirectMessages'
 import DirectMessageUserButton from './DirectMessageUserButton'
-
-const directMessageUsers: IUserDirectMessages[] = [
-  {
-    name: 'Kob3ey',
-    image: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png',
-    id: '1'
-  },
-  {
-    name: 'Tomic',
-    image: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png',
-    id: '2'
-  },
-  {
-    name: 'Plejic',
-    image: 'https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png',
-    id: '10'
-  }
-]
+import { GlobalParametersContext } from '../../../containers/ApplicationMain'
+import { useContext, useEffect, useLayoutEffect, useState } from 'react'
+import IChatJointWithUser from '../../../interfaces/IChatJointWithUser'
 
 const DirectMessages = () => {
   const navigate = useNavigate()
+  const globalParams = useContext(GlobalParametersContext)
+  const [chatsMap, setChatsMap] = useState<Map<string, IChatJointWithUser>>(globalParams.privateChatsById.get)
+  const chats:IChatJointWithUser[] = Array.from(chatsMap.values())
+
+  useEffect(() => {
+    console.log('test')
+  }, [])
+
+  useEffect(() => {
+    setChatsMap(globalParams.privateChatsById.get)
+  }, [globalParams.privateChatsById.get])
 
   return (
     <div>
@@ -31,9 +26,9 @@ const DirectMessages = () => {
         <HiPlusSm className='text-xl cursor-pointer'/>
       </div>
       <div className='mx-2'>
-        {
-          directMessageUsers.map((user) => (
-            <DirectMessageUserButton key={user.name} name={user.name} image={user.image} onClick={() => {navigate(`/channels/@me/${user.id}`)}} />
+        { chats.length > 0 &&
+          chats.map((chat) => (
+            <DirectMessageUserButton key={chat.chat.chatId} unreadMessages={chat.unreadMessages} selected={chat.chat.chatId == globalParams.channelId} name={chat.receiver.userKey.username} image={chat.receiver.imagePath} onClick={() => {navigate(`/channels/@me/${chat.chat.chatId}`)}} />
           ))
         }
       </div>

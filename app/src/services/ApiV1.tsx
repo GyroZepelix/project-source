@@ -5,6 +5,7 @@ import IUser from "../interfaces/IUser";
 import ApiWithKeycloak from "./ApiWithKeycloak";
 
 
+
 export class ApiV1 extends ApiWithKeycloak implements IApi {
   private readonly _baseUrl: string;
 

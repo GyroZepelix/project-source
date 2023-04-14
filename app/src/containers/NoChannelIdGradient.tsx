@@ -15,9 +15,12 @@ interface Position {
 const NoChannelIdGradient:FC<IProps> = ({className}) => {
   
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
+  const [maskRadius, setMaskRadius] = useState<number>(0);
   const latestPosition = useRef<Position>({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
   const requestRef = useRef<number>();
+  const shrinkRef = useRef<number>();
+  const growRef = useRef<number>();
 
   const animate = (time: number) => {
     setPosition((prevPosition) => ({
@@ -26,6 +29,38 @@ const NoChannelIdGradient:FC<IProps> = ({className}) => {
     }));
     requestRef.current = requestAnimationFrame(animate);
   };
+
+
+  const animateRadiusGrow = (time:number) => {
+    setMaskRadius((prevRadius) => Math.min(prevRadius + 0.05, 1))
+    if (maskRadius < 1) {
+      growRef.current = requestAnimationFrame(animateRadiusGrow);
+      return
+    }
+    cancelAnimationFrame(growRef.current!)
+  }
+
+  const animateRadiusShrink = (time:number) => {
+    setMaskRadius((prevRadius) => Math.max(prevRadius - 0.05, 0))
+    if (maskRadius > 0) {
+      shrinkRef.current = requestAnimationFrame(animateRadiusShrink);
+      return
+    }
+    cancelAnimationFrame(shrinkRef.current!)
+  }
+
+  const handleMouseEnter = () => {
+    cancelAnimationFrame(shrinkRef.current!)
+
+    growRef.current=requestAnimationFrame(animateRadiusGrow);
+  }
+
+  const handleMouseLeave = () => {
+    cancelAnimationFrame(growRef.current!)
+    requestAnimationFrame(animateRadiusShrink);
+  }
+
+
 
   useEffect(() => {
     requestRef.current = requestAnimationFrame(animate);
@@ -50,12 +85,14 @@ const NoChannelIdGradient:FC<IProps> = ({className}) => {
       height="100%"
       ref={svgRef}
       onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       >
         <defs>
-          <radialGradient id="circleGradient" cx={position.x} cy={position.y} r="150" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="white" stopOpacity="1" />
-            <stop offset="75%" stopColor="white" stopOpacity="1" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
+          <radialGradient id="circleGradient" cx={position.x} cy={position.y} r={150*maskRadius} gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stopColor="white" stopOpacity={1} />
+            <stop offset="75%" stopColor="white" stopOpacity={1} />
+            <stop offset="100%" stopColor="white" stopOpacity={0} />
           </radialGradient>
           <mask id="circleMask">
             <rect width="100%" height="100%" fill="url(#circleGradient)" />

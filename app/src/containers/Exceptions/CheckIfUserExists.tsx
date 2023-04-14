@@ -8,10 +8,9 @@ import Loading from './Loading'
 
 interface IProps {
   children: React.ReactNode
-  redirect: React.ReactNode
 }
 
-const CheckIfUserExists:FC<IProps> = ({children, redirect}) => {
+const CheckIfUserExists:FC<IProps> = ({children}) => {
 
   const globalParams = useContext(GlobalParametersContext)
   const userQuery = useQuery(

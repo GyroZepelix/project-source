@@ -2,21 +2,29 @@ import { StompSubscription } from '@stomp/stompjs';
 import React, { useContext, useEffect, useState } from 'react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { HiPlusCircle } from 'react-icons/hi';
-import UserMessagesRepresentation from '../components/Messages/FriendMessages/UserMessagesRepresentation';
+import UserMessagesRepresentation, { IUserMessagesRepresentationProps } from '../components/Messages/FriendMessages/UserMessagesRepresentation';
 import Message from '../components/Messages/Message';
-import IChatMessage from '../interfaces/IChatMessage';
 import { GlobalParametersContext } from './ApplicationMain';
+import IMessageJointWithUser from '../interfaces/IMessageJointWithUser';
 
 // TODO: Merge by Time and Username and not only by Username
 
 function MessagingContainer() {
   const globalParams = useContext(GlobalParametersContext)
-  const [messages, setMessages] = useState<IChatMessage[]>([]);
+  const [messages, setMessages] = useState<IMessageJointWithUser[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const inputRef = React.useRef<HTMLInputElement>(null);
   const messageBoxRef = React.useRef<HTMLDivElement>(null);
-  let previousMessage:IChatMessage = {senderUserKey:{username:""}} as IChatMessage
+  let previousMessage:IMessageJointWithUser = {} as IMessageJointWithUser;
   const websocketHeaders = {Authorization: `Bearer ${globalParams.auth?.token}`}
+  let banner: IUserMessagesRepresentationProps = {} as IUserMessagesRepresentationProps;
+  if (globalParams.serverId == '@me') {
+    banner = {
+      username: globalParams.privateChatsById.get.get(globalParams.channelId)?.receiver.userKey.username || '',
+      image: globalParams.privateChatsById.get.get(globalParams.channelId)?.receiver.imagePath || ''
+    }
+  }
+
 
   const keysToIgnore = ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
   const keyDownHandler = (event:KeyboardEvent) => {
@@ -31,11 +39,15 @@ function MessagingContainer() {
   };
 
   const handleSendClick = () => {
+    let recieverEmail = {}
+    if (globalParams.channelId != '') {
+      recieverEmail = {'Receiver-Email': globalParams.privateChatsById.get.get(globalParams.channelId)?.receiver.email || ''}
+    }
     if (currentMessage !== '' && globalParams.stompClient != null) {
       globalParams.stompClient.publish({
-        destination: `/app/chat/${globalParams.channelId.get}`,
+        destination: `/app/chat/${globalParams.channelId}`,
         body: currentMessage,
-        headers: websocketHeaders
+        headers: {...websocketHeaders, ...recieverEmail}
       });
       setCurrentMessage('');
     }
@@ -43,7 +55,7 @@ function MessagingContainer() {
 
   useEffect(() => {
     let subscription: StompSubscription | undefined = undefined;
-    const channelId = globalParams.channelId.get;
+    const channelId = globalParams.channelId;
     const clientConnectedAndChannelSelected = globalParams.stompClient != undefined && channelId != null && channelId !== '' && globalParams.stompClient.active;
     if (clientConnectedAndChannelSelected) {
       subscription = globalParams.stompClient?.subscribe(`/channel/chat/${channelId}`, (message) => {
@@ -55,7 +67,7 @@ function MessagingContainer() {
         }
       });
       globalParams.stompClient?.publish({destination: `/app/chat/${channelId}/get`, headers: websocketHeaders})
-      console.log("subscribed");
+      console.log("subscribed to channel", channelId);
     } else {
       setMessages([]); 
     }
@@ -64,11 +76,11 @@ function MessagingContainer() {
     return () => {
       if (subscription != undefined) {
         subscription.unsubscribe();
-        console.log("unsubscribed");
+        console.log("unsubscribed from channel" + channelId);
       }
 
     }
-  }, [globalParams.channelId.get, globalParams.stompClient]);
+  }, [globalParams.channelId, globalParams.stompClient]);
 
 
 
@@ -93,9 +105,9 @@ function MessagingContainer() {
   return (
     <div className="flex flex-col h-full grow">
       <div ref={messageBoxRef} className="mr-1 flex flex-col flex-1 overflow-y-scroll w-auto overflow-x-clip">
-        <UserMessagesRepresentation username='Kob3ey' image='https://upload.wikimedia.org/wikipedia/en/9/9a/Trollface_non-free.png'/>
+        { banner && <UserMessagesRepresentation {...banner}/>}
         {messages.map((message, index) => {
-        let extendsMessage = message.senderUserKey.username == previousMessage.senderUserKey.username;
+        let extendsMessage = message.sender.email == previousMessage.sender?.email;
         previousMessage = message;
         return  <Message key={index} chatMessage={message} extendsMessage={extendsMessage}/>
         })}

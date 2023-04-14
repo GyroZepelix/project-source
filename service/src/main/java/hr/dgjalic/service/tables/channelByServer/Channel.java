@@ -1,4 +1,4 @@
-package hr.dgjalic.service.tables.chatByUser;
+package hr.dgjalic.service.tables.channelByServer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,11 +17,11 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("chat_by_user")
-public class Chat {
+//@Table("channel_by_server")
+public class Channel {
 
-    @PrimaryKeyColumn(name = "email", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    private String email;
+    @PrimaryKeyColumn(name = "server_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    private String serverId;
 
     @PrimaryKeyColumn(name = "last_message_time", ordinal = 1, type = PrimaryKeyType.CLUSTERED)
     private Timestamp lastMessageTime;

@@ -44,6 +44,7 @@ module.exports = {
           1000: "#174B5F"
         },
         main: "#FFFFFF",
+        mainGray: "#b2c0c2",
         highlight: {
           0: "#F2A585",
           1: "#D35229",

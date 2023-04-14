@@ -3,11 +3,12 @@ package hr.dgjalic.service.tables.messagesByChat;
 import hr.dgjalic.service.services.AuthTokenConverter;
 import hr.dgjalic.service.tables.userByEmail.User;
 import hr.dgjalic.service.tables.userByEmail.UserService;
-import hr.dgjalic.service.user_defined_types.UserKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -17,30 +18,39 @@ public class MessagesServices {
     private final UserService userService;
     private final AuthTokenConverter authTokenConverter;
 
-    public Iterable<Message> getAllMessagesByChatId(String chatId) {
-        return messagesRepository.findAllByChatId(chatId);
+    public ArrayList<MessageJointWithUser> getAllMessagesJointWithUserByChatId(UUID chatId) {
+        ArrayList<MessageJointWithUser> messages = new ArrayList<>();
+        messagesRepository.findAllByChatId(chatId).forEach(message -> {
+                    User sender = userService.getUserByEmail(message.getSenderEmail()).orElseThrow(
+                            () -> new RuntimeException("User not found"));
+                    MessageJointWithUser messageJointWithUser = MessageJointWithUser.builder()
+                            .message(message)
+                            .sender(sender)
+                            .build();
+                    messages.add(messageJointWithUser);
+                }
+        );
+        return messages;
     }
 
     public Iterable<Message> getAllMessages() {
         return messagesRepository.findAll();
     }
 
-    public Message createMessages(String messageContent, String chatId, String authToken) {
+    public MessageJointWithUser createMessages(String messageContent, UUID chatId, String authToken) {
         User sender = userService.getUser(authToken).orElseThrow(() -> new RuntimeException("User not found"));
         Message message = Message.builder()
                 .content(messageContent)
                 .messageTime(new Timestamp(System.currentTimeMillis()))
                 .chatId(chatId)
                 .senderEmail(sender.getEmail())
-                .senderIconPath(sender.getImagePath())
-                .senderUserKey(sender.getUserKey())
+                .build();
+        MessageJointWithUser messageJointWithUser = MessageJointWithUser.builder()
+                .message(message)
+                .sender(sender)
                 .build();
 
         messagesRepository.save(message);
-        return message;
-    }
-
-    public void purgeMessages(String chatId) {
-        messagesRepository.deleteAllByChatId(chatId);
+        return messageJointWithUser;
     }
 }

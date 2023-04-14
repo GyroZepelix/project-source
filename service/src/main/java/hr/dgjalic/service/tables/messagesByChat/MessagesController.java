@@ -1,7 +1,11 @@
 package hr.dgjalic.service.tables.messagesByChat;
 
 
-import hr.dgjalic.service.user_defined_types.UserKey;
+import hr.dgjalic.service.services.AuthTokenConverter;
+import hr.dgjalic.service.tables.UnreadPrivateMessage.UnreadPrivateMessage;
+import hr.dgjalic.service.tables.UnreadPrivateMessage.UnreadPrivateMessageService;
+import hr.dgjalic.service.tables.chatByUser.ChatController;
+import hr.dgjalic.service.tables.chatByUser.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
@@ -10,37 +14,34 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 public class MessagesController {
 
     private final MessagesServices messagesServices;
+    private final ChatController chatController;
+    private final UnreadPrivateMessageService unreadPrivateMessageService;
+    private final AuthTokenConverter authTokenConverter;
     private final SimpMessagingTemplate simpMessagingTemplates;
 
     @MessageMapping("/chat/{chatId}")
-    private void receiveAndDistributeMessage(@Payload String content, @DestinationVariable String chatId, @Header("Authorization") String authToken) {
-        if (authToken == null) {
-            return;
-        }
-        Message returnedMessage = messagesServices.createMessages(content, chatId, authToken);
-
+    private void receiveAndDistributeMessage(@Payload String content, @DestinationVariable UUID chatId, @Header("Authorization") String authToken, @Header("Receiver-Email") String receiverEmail) {
+        if (authToken == null) return;
+        chatController.updateChatsWhenMessageSent(authToken, receiverEmail, chatId);
+        MessageJointWithUser returnedMessage = messagesServices.createMessages(content, chatId, authToken);
         simpMessagingTemplates.convertAndSend("/channel/chat/" + chatId, returnedMessage );
+
     }
 
     @MessageMapping("/chat/{chatId}/get")
-    private void getMessages(@DestinationVariable String chatId) {
-        simpMessagingTemplates.convertAndSend("/channel/chat/" + chatId, messagesServices.getAllMessagesByChatId(chatId));
+    private void getMessages(@DestinationVariable UUID chatId, @Header("Authorization") String authToken) {
+        String email = authTokenConverter.getEmailFromToken(authToken);
+        simpMessagingTemplates.convertAndSend("/channel/chat/" + chatId,
+                messagesServices.getAllMessagesJointWithUserByChatId(chatId));
+        unreadPrivateMessageService.decrementUnreadMessageToZero(email, chatId);
+        chatController.getAllChatsSocket(email, authToken);
     }
-
-    @MessageMapping("/chat/{chatId}/purge")
-    private void purgeMessages(@DestinationVariable String chatId) {
-        messagesServices.purgeMessages(chatId);
-        System.out.println("Purged messages from chat: " + chatId);
-    }
-
-
 
 }

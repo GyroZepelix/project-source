@@ -11,6 +11,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -20,7 +21,7 @@ import java.sql.Timestamp;
 public class Message {
 
     @PrimaryKeyColumn(name = "chat_id", ordinal = 0, type = PrimaryKeyType.PARTITIONED)
-    private String chatId;
+    private UUID chatId;
 
     @PrimaryKeyColumn(name = "message_time", ordinal = 1, type = PrimaryKeyType.CLUSTERED)
     private Timestamp messageTime;
@@ -30,11 +31,4 @@ public class Message {
 
     @Column("sender_email")
     private String senderEmail;
-
-    @Column("sender_icon_path")
-    private String senderIconPath;
-
-    @Column("sender_user_key")
-    private UserKey senderUserKey;
-
 }

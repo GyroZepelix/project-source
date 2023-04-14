@@ -21,6 +21,14 @@ public class UserService {
         return Optional.ofNullable(userRepository.findByEmail(email));
     }
 
+    public Optional<User> getUserByEmail(String email) {
+        return Optional.ofNullable(userRepository.findByEmail(email));
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
     public Optional<User> createUser(User user, String authToken) {
         String email = authTokenConverter.getEmailFromToken(authToken);
         if (userRepository.existsByEmail(email)) {

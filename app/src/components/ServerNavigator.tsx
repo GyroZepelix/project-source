@@ -1,6 +1,11 @@
 import { useLocation, useNavigate } from 'react-router'
 import homeButton from '../assets/homeButton.svg'
 import ServerButton from './ServerSelection/ServerButton'
+import { GlobalParametersContext } from '../containers/ApplicationMain'
+import { useContext, useEffect, useState } from 'react'
+import IChatJointWithUser from '../interfaces/IChatJointWithUser'
+import { StompSubscription } from '@stomp/stompjs'
+import { emailFromToken } from '../services/JWT'
 
 // TODO: Get rid of mock and implement real servers
 
@@ -19,10 +24,20 @@ const appRoot = '/channels'
 const ServerNavigator = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const globalParams = useContext(GlobalParametersContext)
+  const [chatsMap, setChatsMap] = useState<Map<string, IChatJointWithUser>>(globalParams.privateChatsById.get)
+  const unreadMessages =  Array.from(chatsMap.values()).filter((chat) => chat.unreadMessages > 0)
+  
+  useEffect(() => {
+    setChatsMap(globalParams.privateChatsById.get)
+  }, [globalParams.privateChatsById.get])
+  
 
   const selectedServer = location.pathname.split("/")[2]
   const dotOnHover = 'before:-translate-x-3.5 before:rounded-md before:top-0 before:transition-all before:h-3 before:my-auto before:bottom-0 hover:before:absolute hover:before:block before:w-2 hover:before:h-10 before:bg-main'
 
+ 
+  
 
   const onClickHome = () => {
     navigate(`${appRoot}/@me`)
@@ -32,11 +47,20 @@ const ServerNavigator = () => {
     navigate(`${appRoot}/${serverId}`)
   }
 
+  const onClickUnreadUser = (chatId: string) => {
+    navigate(`${appRoot}/@me/${chatId}`)
+  }
+
   return (
   <nav className=' bg-primary-0 h-full px-2.5 py-4 gap-2 flex flex-col items-center select-none'>
     <div className={`relative cursor-pointer ${selectedServer == "@me" && "before:block before:absolute "} ${dotOnHover} `} onClick={onClickHome}>
       <img className='h-[50px] select-none pointer-events-none ' src={homeButton} alt="Home Button" />
     </div>
+    {
+        unreadMessages.map((chat) => (
+          <ServerButton key={chat.receiver.email} image={chat.receiver.imagePath} unreadMessages={chat.unreadMessages} name={chat.receiver.userKey.username} onClick={() => {onClickUnreadUser(chat.chat.chatId)}}/>
+        ))
+    }
     <div className='bg-primary-750 w-10 h-[3px] rounded' />
     {mockServers.map((server) => (
       <ServerButton key={server.serverId} selected={server.serverId == selectedServer} {...server} onClick={() => {onClickServer(server.serverId)}} />
