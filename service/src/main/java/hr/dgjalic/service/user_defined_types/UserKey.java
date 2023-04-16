@@ -13,6 +13,13 @@ import org.springframework.data.cassandra.core.mapping.UserDefinedType;
 @NoArgsConstructor
 @Builder
 public class UserKey {
+
+    public UserKey(String usernameAndTag) {
+        String[] split = usernameAndTag.split("#");
+        this.username = split[0];
+        this.tag = Integer.parseInt(split[1]);
+    }
+
     private String username;
 
     @CassandraType(type = CassandraType.Name.SMALLINT)

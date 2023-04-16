@@ -33,7 +33,7 @@ const SidebarFooter:FC<IProps> = ({buttons}) => {
   return (
     <div className="flex justify-between py-1 px-2 bg-primary-250 items-center select-none">
       <div className="cursor-pointer flex grow gap-2 hover:bg-primary-1000 py-1 px-2 rounded-md">
-        <img className="h-9 w-9 rounded-full bg-slate-400 pointer-events-none" src={userData.imagePath} alt="" />
+        <img className="h-9 w-9 rounded-full bg-slate-400 pointer-events-none object-cover" src={userData.imagePath} alt="" />
         <div className="flex flex-col text-xs justify-center">
           <p className="font-bold">{userData.userKey.username}</p>
           <p className="opacity-70">#{userData.userKey.tag}</p>

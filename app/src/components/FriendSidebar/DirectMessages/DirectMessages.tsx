@@ -1,4 +1,4 @@
-import {HiPlusSm} from 'react-icons/hi'
+import {HiArrowRight, HiPlusSm} from 'react-icons/hi'
 import { useNavigate } from 'react-router'
 import DirectMessageUserButton from './DirectMessageUserButton'
 import { GlobalParametersContext } from '../../../containers/ApplicationMain'
@@ -19,11 +19,14 @@ const DirectMessages = () => {
     setChatsMap(globalParams.privateChatsById.get)
   }, [globalParams.privateChatsById.get])
 
+  const onAddButtonClick = () => { navigate('/channels/@me/add')
+  }
+
   return (
     <div>
       <div className='select-none my-2 mx-5 flex justify-between items-center'>
         <p className='opacity-70 text-xs font-semibold hover:opacity-100'>DIRECT MESSAGES</p>
-        <HiPlusSm className='text-xl cursor-pointer'/>
+        <HiPlusSm onClick={onAddButtonClick} className='text-xl cursor-pointer'/>
       </div>
       <div className='mx-2'>
         { chats.length > 0 &&

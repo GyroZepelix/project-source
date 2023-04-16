@@ -18,4 +18,6 @@ export class ApiV1 extends ApiWithKeycloak implements IApi {
 
   createUser = (user: IUser) => {return axios.post(`${this._baseUrl}/userByEmail`, user, this.buildConfig())}
 
+  createChannel = (userToAdd: string) => {return axios.post(`${this._baseUrl}/chatByUser/${userToAdd}`, {}, this.buildConfig())}
+
 }

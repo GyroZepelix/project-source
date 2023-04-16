@@ -41,7 +41,7 @@ public class MessagesController {
         simpMessagingTemplates.convertAndSend("/channel/chat/" + chatId,
                 messagesServices.getAllMessagesJointWithUserByChatId(chatId));
         unreadPrivateMessageService.decrementUnreadMessageToZero(email, chatId);
-        chatController.getAllChatsSocket(email, authToken);
+        chatController.getAllChatsSocket(authToken);
     }
 
 }

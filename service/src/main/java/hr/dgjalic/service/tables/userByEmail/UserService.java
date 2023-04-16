@@ -1,6 +1,7 @@
 package hr.dgjalic.service.tables.userByEmail;
 
 import hr.dgjalic.service.services.AuthTokenConverter;
+import hr.dgjalic.service.user_defined_types.UserKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,9 @@ public class UserService {
         user.setEmail(email);
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         return Optional.of(userRepository.save(user));
+    }
+
+    public Optional<User> getUserByUserKey(UserKey userKey) {
+        return Optional.ofNullable(userRepository.findByUserKey(userKey));
     }
 }

@@ -18,7 +18,7 @@ const ServerButton:FC<IProps> = ({selected=false, image="", name="", serverId=""
   return (
     <div className={`min-w-[49px] group ${selected && "before:block before:absolute "} ${dotOnHover} relative bg-primary-1000 rounded-full cursor-pointer`} onClick={() => onClick(serverId)}>
       <img className={`rounded-[25px] transition-[border-radius] group-hover:rounded-2xl ${selected && "!rounded-2xl"} object-cover w-[50px] h-[50px] pointer-events-none select-none`} src={image} alt={name} />
-      {unreadMessages && <div className="absolute bg-red-500 text-main font-bold rounded-full text-xs text-center bottom-0 right-0 outline outline-2 outline-primary-0 flex justify-center items-center"><p className="py-[1px] px-[5px]">{unreadMessages}</p></div>}
+      {unreadMessages && <div className="absolute bg-red-500 text-main font-bold rounded-full text-xs text-center bottom-0 right-0 outline outline-2 outline-primary-0 flex justify-center items-center min-w-[18px]"><p className="py-[1px] px-[5px]">{unreadMessages}</p></div>}
     </div>
   )
 }

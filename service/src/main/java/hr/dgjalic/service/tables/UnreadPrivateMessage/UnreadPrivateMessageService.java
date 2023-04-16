@@ -28,8 +28,14 @@ public class UnreadPrivateMessageService {
         }
 
         public void decrementUnreadMessageToZero(String email, UUID chatId) {
-                unreadPrivateMessageRepository.decrementCounter(unreadPrivateMessageRepository.findByEmailAndChatId(email, chatId)
+                long unreadMessages = unreadPrivateMessageRepository.findByEmailAndChatId(email, chatId)
                         .map(UnreadPrivateMessage::getUnreadMessages)
-                        .orElseThrow(IllegalStateException::new), email, chatId);
+                        .orElseThrow(IllegalStateException::new);
+                if (unreadMessages > 0) {
+                        unreadPrivateMessageRepository.decrementCounter(unreadMessages, email, chatId);
+                } else {
+                        unreadPrivateMessageRepository.incrementCounter(-unreadMessages, email, chatId);
+                }
+
         }
 }

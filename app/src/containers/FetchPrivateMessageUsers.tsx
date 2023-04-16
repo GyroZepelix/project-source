@@ -26,7 +26,7 @@ const FetchPrivateMessageUsers:FC<IProps> = ({children}) => {
           setPrivateChats(fetchedChats)
         }
       })
-      globalParams.stompClient?.publish({destination: `/app/chats/${myEmail}`, headers: websocketHeaders})
+      globalParams.stompClient?.publish({destination: `/app/chats`, headers: websocketHeaders})
     }
     
 
