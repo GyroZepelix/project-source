@@ -22,8 +22,8 @@ const CreateUser = () => {
   )
 
   const [username, setUsername] = useState<string>('')
-  const [usertag, setUsertag] = useState<string>(Math.floor(Math.random()*9999).toString())
-  const [profilePicture, setProfilePicture] = useState<string>('https://cdnb.artstation.com/p/assets/images/images/004/456/215/large/wil-hughes-troll-face.jpg?1483926054')
+  const [usertag, setUsertag] = useState<string>(Math.floor(1111+Math.random()*8888).toString())
+  const [profilePicture, setProfilePicture] = useState<string>("")
   
   useEffect(() => {
     globalParams.auth?.profile.then((profile: any) => {
@@ -46,13 +46,18 @@ const CreateUser = () => {
 
   }
 
+  const onPictureChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProfilePicture(event.target.value)
+  }
+
   const usernameChange = (event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
 
   const createUser = () => {
+    debugger
     const user:IUser = {
       email: "",
       createdAt: new Date(),
-      imagePath: profilePicture,
+      imagePath: profilePicture || `https://api.dicebear.com/6.x/initials/svg?seed=${username}`,
       userKey: {
         username: username,
         tag: Number.parseInt(usertag)
@@ -80,13 +85,15 @@ const CreateUser = () => {
                 <input className='bg-inherit p-0.5 w-2/3' maxLength={12} value={username} onChange={usernameChange} placeholder={"Your username"} type="text" /> 
                 #<input className='bg-inherit w-12 p-0.5 text-center' value={usertag} onChange={usertagChange} type="number"  />
               </span>
-              <h2 className='text-main mt-4 mb-2'>Choose an image!</h2>
-              <img src="https://cdnb.artstation.com/p/assets/images/images/004/456/215/large/wil-hughes-troll-face.jpg?1483926054" alt="profilepicture"
+              
+              <h2 className='text-main mt-4'>Choose an image!</h2>
+              <input type="text" className='bg-inherit p-0.5 w-2/3 mb-2' placeholder='Enter the url to the image' value={profilePicture} onChange={onPictureChange} />
+              <img src={profilePicture || `https://api.dicebear.com/6.x/initials/svg?seed=${username}`} alt=""
               className='object-cover h-32 w-32 rounded-full border-main border-2' />
             </div>
           </div>
 
-          <div className='border-l-2 h-[400px] w-[200px] overflow-hidden rounded-r-3xl'>
+          <div className='border-l-2 h-full w-[200px] overflow-hidden rounded-r-3xl'>
             <img src="https://www.pixelstalk.net/wp-content/uploads/images6/Outer-Space-Desktop-Background.jpg" 
             className='object-left-bottom animate-[object-position-shift_30s_linear_infinite] h-full w-full object-cover' />
           </div>
@@ -95,7 +102,6 @@ const CreateUser = () => {
         </div>
       </div>
     </div>
-
   )
 }
 

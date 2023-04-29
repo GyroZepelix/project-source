@@ -1,6 +1,5 @@
 package hr.dgjalic.service.tables.userByEmail;
 
-import hr.dgjalic.service.user_defined_types.UserKey;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
