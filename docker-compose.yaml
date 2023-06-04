@@ -3,7 +3,6 @@ name: project-source
 
 services:
   postgres:
-    container_name: project-source-postgres-keycloak-1
     image: postgres:latest
     environment:
       POSTGRES_DB: keycloak
@@ -15,15 +14,48 @@ services:
       - "5432:5432"
 
   cassandra:
-    container_name: project-source-cassandra-1
     image: cassandra:latest
     ports:
       - "9042:9042"
     volumes:
       - cassandra-db:/var/lib/cassandra
     environment:
-      - CASSANDRA_CLUSTER_NAME=project-source
+      - CASSANDRA_CLUSTER_NAME=project_source
 
+  frontend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+     - "80:80"
+    environment:
+      VITE_BACKEND_BASE_URL: http://service:8081
+      VITE_KEYCLOAK_URL: http://keycloak:8080
+      VITE_KEYCLOAK_REALM: project-source
+      VITE_KEYCLOAK_CLIENT_ID: frontend
+
+
+  # service:
+  #   build:
+  #     context: ./service
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     CASSANDRA_PORT: 9042
+  #     CASSANDRA_HOST: cassandra
+  #     CASSANDRA_KEYSPACE: project_source
+  #     PORT: 8081
+  #     CLIENT_ID: backend
+  #     KEYCLOAK_REALM: project_source
+  #     KEYCLOAK_PORT: 8080
+  #     KEYCLOAK_HOSTNAME: http://keycloak
+  #   depends_on:
+  #     - cassandra
+  #     - postgres
+  #     - keycloak
 
   keycloak:
     image: quay.io/keycloak/keycloak:latest
@@ -32,7 +64,7 @@ services:
       KC_HOSTNAME: localhost
       KC_DB_PASSWORD: password-keycloak
       KC_DB_USERNAME: keycloak
-      KC_DB_URL: jdbc:postgresql://project-source-postgres-keycloak-1:5432/keycloak
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
       KC_DB_URL_PORT: 5432
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: password
@@ -44,6 +76,7 @@ services:
       - ./docker/keycloak:/opt/keycloak/data/import
     depends_on:
       - postgres
+
 
 volumes:
   cassandra-db:
