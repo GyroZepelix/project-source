@@ -1,0 +1,14 @@
+FROM ubuntu
+
+RUN apt-get -y update; apt-get -y install curl
+
+RUN curl -o /usr/local/bin/wait-for-it https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
+    && chmod +x /usr/local/bin/wait-for-it
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD echo "Hello World!"
+
+
