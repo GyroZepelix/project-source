@@ -2,10 +2,8 @@ package hr.dgjalic.service.tables.messagesByChat;
 
 
 import hr.dgjalic.service.services.AuthTokenConverter;
-import hr.dgjalic.service.tables.UnreadPrivateMessage.UnreadPrivateMessage;
 import hr.dgjalic.service.tables.UnreadPrivateMessage.UnreadPrivateMessageService;
 import hr.dgjalic.service.tables.chatByUser.ChatController;
-import hr.dgjalic.service.tables.chatByUser.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;

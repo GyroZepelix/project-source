@@ -1,6 +1,5 @@
 package hr.dgjalic.service.tables.messagesByChat;
 
-import hr.dgjalic.service.user_defined_types.UserKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

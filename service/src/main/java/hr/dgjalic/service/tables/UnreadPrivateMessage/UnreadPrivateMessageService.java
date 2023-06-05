@@ -1,7 +1,6 @@
 package hr.dgjalic.service.tables.UnreadPrivateMessage;
 
 import hr.dgjalic.service.tables.chatByUser.ChatByUser;
-import hr.dgjalic.service.tables.chatByUser.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

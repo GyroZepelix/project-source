@@ -1,6 +1,5 @@
 package hr.dgjalic.service.tables.UnreadPrivateMessage;
 
-import com.datastax.oss.driver.api.core.cql.Row;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;

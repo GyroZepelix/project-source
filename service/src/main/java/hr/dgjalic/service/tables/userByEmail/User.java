@@ -7,7 +7,7 @@ import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.*;
 
 import java.sql.Timestamp;
-import java.util.UUID;
+
 
 @Builder
 @NoArgsConstructor

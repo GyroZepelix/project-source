@@ -16,7 +16,6 @@ public class MessagesServices {
 
     private final MessagesRepository messagesRepository;
     private final UserService userService;
-    private final AuthTokenConverter authTokenConverter;
 
     public ArrayList<MessageJointWithUser> getAllMessagesJointWithUserByChatId(UUID chatId) {
         ArrayList<MessageJointWithUser> messages = new ArrayList<>();
