@@ -4,6 +4,10 @@ spring:
     contact-points: ${CASSANDRA_HOST:cassandra}
     keyspace-name: ${CASSANDRA_KEYSPACE:project_source}
     schema-action: create_if_not_exists
+    username: cassandra
+    password: cassandra
+    connection:
+      connect-timeout: 60s
 
 
   security:
