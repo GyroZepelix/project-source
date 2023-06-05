@@ -31,7 +31,7 @@ services:
      - "80:80"
     environment:
       VITE_BACKEND_BASE_URL: http://service:8081
-      VITE_KEYCLOAK_URL: http://keycloak:8080
+      VITE_KEYCLOAK_URL: https://keycloak:8080
       VITE_KEYCLOAK_REALM: project-source
       VITE_KEYCLOAK_CLIENT_ID: frontend
 
