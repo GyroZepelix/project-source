@@ -73,7 +73,8 @@ services:
     command:
       - start-dev --import-realm
     volumes:
-      - ./docker/keycloak:/opt/keycloak/data/import
+      - ./docker/keycloak/realm-export:/opt/keycloak/data/import
+      - ./docker/keycloak/ssl:/opt/keycloak/conf
     depends_on:
       - postgres
 
