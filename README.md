@@ -13,6 +13,11 @@ It is made with the following technologies:
 
 Deployment is simple, in the root of the project run the following command to setup automaticly setup the frontend, keycloak and both databases
 
+If you do not have your own ssl certificates you can generate them with the following command in the root of the project
+```bash
+./generate-keys.sh
+```
+
 ```bash
 docker compose up -d
 ```
