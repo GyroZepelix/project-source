@@ -11,7 +11,8 @@ RUN npm run build
 
 FROM nginx:1.21.6-alpine
 
-COPY nginx/* /etc/nginx/
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/ssl /etc/nginx/ssl
 
 COPY --from=builder /app/dist /usr/share/nginx/html
 
