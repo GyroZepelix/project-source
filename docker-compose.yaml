@@ -28,12 +28,12 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-     - "443:443"
+      - "443:443"
     environment:
-      VITE_BACKEND_BASE_URL: http://service:8081
-      VITE_KEYCLOAK_URL: https://keycloak:8443
-      VITE_KEYCLOAK_REALM: project-source
-      VITE_KEYCLOAK_CLIENT_ID: frontend
+      - VITE_BACKEND_BASE_URL=http://service:8081
+      - VITE_KEYCLOAK_URL=https://keycloak:8443
+      - VITE_KEYCLOAK_REALM=project-source
+      - VITE_KEYCLOAK_CLIENT_ID=frontend
 
 
   # service:
