@@ -31,7 +31,7 @@ services:
      - "443:443"
     environment:
       VITE_BACKEND_BASE_URL: http://service:8081
-      VITE_KEYCLOAK_URL: https://keycloak:8080
+      VITE_KEYCLOAK_URL: https://keycloak:8443
       VITE_KEYCLOAK_REALM: project-source
       VITE_KEYCLOAK_CLIENT_ID: frontend
 
@@ -71,10 +71,10 @@ services:
     ports:
       - "8443:8443"
     command:
-      - start --import-realm
+      - start --import-realm --https-certificate-file=/ssl/certfile.pem --https-certificate-key-file=/ssl/keyfile.pem
     volumes:
       - ./docker/keycloak/realm-export:/opt/keycloak/data/import
-#      - ./docker/keycloak/ssl:/opt/keycloak/conf
+      - ./docker/keycloak/ssl:/ssl
     depends_on:
       - postgres
 
