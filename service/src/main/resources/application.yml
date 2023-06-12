@@ -10,8 +10,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_HOSTNAME:http://localhost}:${KEYCLOAK_PORT:8080}/realms/${KEYCLOAK_REALM:project-source}
-          jwk-set-uri: ${KEYCLOAK_HOSTNAME:http://localhost}:${KEYCLOAK_PORT:8080}/realms/${KEYCLOAK_REALM:project-source}/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAK_HOSTNAME:http://localhost}:${KEYCLOAK_PORT:8443}/realms/${KEYCLOAK_REALM:project-source}
+          jwk-set-uri: ${KEYCLOAK_HOSTNAME:http://localhost}:${KEYCLOAK_PORT:8443}/realms/${KEYCLOAK_REALM:project-source}/protocol/openid-connect/certs
 
 jwt:
   auth:

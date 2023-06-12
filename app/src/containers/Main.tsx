@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router"
+import { Routes, Route, Navigate } from "react-router"
 import ApplicationMain from "./ApplicationMain"
 import Home from "./Home"
 import WebsocketTest from "./WebsocketTest/WebsocketTest"
@@ -9,7 +9,7 @@ import WebsocketTest from "./WebsocketTest/WebsocketTest"
 const Main = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Navigate to={"/channels/@me"} replace/>} />
       <Route path="/channels/:serverId/*" element={<ApplicationMain/>}/>
       <Route path="*" element={<div>404</div>} />
       <Route path="/websockettest" element={<WebsocketTest />} />
