@@ -6,11 +6,10 @@ interface IProps {
   onDisconnect: () => void
 }
 
-const brokerURL = `ws://${process.env.VITE_BACKEND_BASE_URL?.split('//')[1]}/chat`
 
 const useWebsocket = (props:IProps) => {
   const [stompClient, setStompClient] = useState<Client>(new Client({
-    brokerURL: brokerURL,
+    brokerURL: `wss://${import.meta.env.VITE_BACKEND_BASE_URL?.split('//')[1]}/chat`,
     onConnect: props.onConnect,
     onDisconnect: props.onDisconnect
   }))

@@ -71,7 +71,7 @@ services:
     ports:
       - "8443:8443"
     command:
-      - start --import-realm --https-certificate-file=/ssl/certfile.pem --https-certificate-key-file=/ssl/keyfile.pem
+      - start --import-realm --https-certificate-file=/ssl/keycloak-server.crt.pem --https-certificate-key-file=/ssl/keycloak-server.key.pem
     volumes:
       - ./docker/keycloak/realm-export:/opt/keycloak/data/import
       - ./docker/keycloak/ssl:/ssl

@@ -34,11 +34,12 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: password
     ports:
-      - "8080:8080"
+      - "8443:8443"
     command:
-      - start-dev --import-realm
+      - start --import-realm --https-certificate-file=/ssl/keycloak-server.crt.pem --https-certificate-key-file=/ssl/keycloak-server.key.pem
     volumes:
-      - ./docker/keycloak:/opt/keycloak/data/import
+      - ./docker/keycloak/realm-export:/opt/keycloak/data/import
+      - ./docker/keycloak/ssl:/ssl
     depends_on:
       - postgres
 
